@@ -1,0 +1,134 @@
+import java.text.SimpleDateFormat
+
+plugins {
+    id 'com.android.application'
+    id 'org.jetbrains.kotlin.android'
+    id('com.github.sgtsilvio.gradle.android-retrofix') version '0.5.0'
+}
+
+android {
+    compileSdkVersion 33  // Updated from 30 to 33
+    buildToolsVersion "33.0.1" // Recommended to update
+
+    defaultConfig {
+        applicationId "com.reeman.delige"
+        minSdkVersion 21
+        //noinspection ExpiredTargetSdkVersion
+        targetSdkVersion 33  // Updated from 30 to 33
+        versionCode 308
+        versionName "3.0.5_22.5_in"
+        testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
+        buildConfigField 'String', 'APP_LOG_DIR', '"deligo_log"'
+        buildConfigField 'String', 'CRASH_LOG_DIR', '"deligo_carsh_log"'
+        buildConfigField 'String', 'WHEEL_INFO_DIR', '"wheel_info"'
+        buildConfigField 'String', 'BATTERY_REPORT_DIR', '"battery_report"'
+        buildConfigField 'Boolean', 'APP_FORCE_USE_ZH', 'false'
+
+        /*ndk {
+            abiFilters 'armeabi', 'armeabi-v7a'
+        }*/
+        multiDexEnabled true
+    }
+
+    lintOptions {
+        abortOnError false
+    }
+
+    buildTypes {
+        release {
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+        }
+
+        debug {
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+        }
+    }
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_1_8
+        targetCompatibility JavaVersion.VERSION_1_8
+    }
+
+    sourceSets {
+        main {
+            jniLibs.srcDirs = ['jniLibs']
+        }
+    }
+
+    /*repositories {
+        flatDir {
+            dirs 'libs'
+        }
+    }*/
+
+    android.applicationVariants.all {
+        variant ->
+            variant.outputs.all {
+                outputFileName = "deligo_${defaultConfig.applicationId}_v${defaultConfig.versionName}-${getCurrentTime()}.apk"
+            }
+    }
+    packagingOptions {
+        resources {
+            excludes += ['META-INF/INDEX.LIST', 'META-INF/io.netty.versions.properties']
+        }
+    }
+
+}
+
+configurations.configureEach {
+    resolutionStrategy {
+        force "org.jetbrains.kotlin:kotlin-stdlib:1.8.0"
+        force "org.jetbrains.kotlin:kotlin-stdlib-jdk8:1.8.0"
+    }
+}
+
+
+def static getCurrentTime() {
+    SimpleDateFormat formatter = new SimpleDateFormat("yyyyMMddHHmm");
+    Date curDate = new Date(System.currentTimeMillis());
+    return formatter.format(curDate);
+} 
+
+dependencies {
+    implementation fileTree(dir: 'libs', include: ['*.jar', '*.aar'])
+    implementation 'androidx.appcompat:appcompat:1.2.0'
+    implementation 'com.google.android.material:material:1.2.1'
+    implementation 'androidx.constraintlayout:constraintlayout:2.0.1'
+    implementation 'pl.droidsonroids.gif:android-gif-drawable:1.2.22'
+    implementation 'com.google.code.gson:gson:2.8.6'
+    implementation 'com.squareup.retrofit2:retrofit:2.9.0'
+    implementation 'com.squareup.retrofit2:converter-gson:2.9.0'
+    implementation 'com.squareup.retrofit2:adapter-rxjava3:2.9.0'
+    implementation 'io.reactivex.rxjava3:rxjava:3.0.12'
+    implementation "androidx.swiperefreshlayout:swiperefreshlayout:1.0.0"
+    implementation 'io.reactivex.rxjava3:rxandroid:3.0.0'
+    implementation 'androidx.legacy:legacy-support-v4:1.0.0'
+    implementation 'org.jetbrains:annotations:15.0'
+    implementation 'com.kyleduo.switchbutton:library:2.1.0'
+    implementation 'com.github.ybq:Android-SpinKit:1.4.0'
+    implementation 'com.github.sephiroth74:android-target-tooltip:2.0.4'
+    implementation 'com.jakewharton.timber:timber:5.0.1'
+    implementation 'com.microsoft.cognitiveservices.speech:client-sdk:1.19.0'
+    implementation 'com.github.abdularis:androidbuttonprogress:1.1.0'
+    implementation "androidx.room:room-runtime:2.6.1"
+
+    implementation "androidx.room:room-rxjava3:2.6.0"
+
+    annotationProcessor "androidx.room:room-compiler:2.6.1"
+    testImplementation 'junit:junit:4.+'
+    androidTestImplementation 'androidx.test.ext:junit:1.1.2'
+    androidTestImplementation 'androidx.test.espresso:espresso-core:3.3.0'
+    implementation "org.greenrobot:eventbus:3.3.1"
+    implementation 'com.iqiyi.xcrash:xcrash-android-lib:3.0.0'
+    implementation 'com.github.Misaka-XXXXII:reeman-lib:1.1.2'
+    implementation 'com.github.Misaka-XXXXII.reeman-lib:serialport:1.1.2'
+    implementation 'com.hivemq:hivemq-mqtt-client:1.3.0'
+    retrofix('net.sourceforge.streamsupport:android-retrostreams:1.7.4')
+    retrofix('net.sourceforge.streamsupport:android-retrofuture:1.7.4')
+    implementation 'org.jetbrains.kotlinx:kotlinx-coroutines-core:1.9.0-RC.2'
+    implementation 'org.jetbrains.kotlinx:kotlinx-coroutines-android:1.9.0-RC.2'
+    implementation "androidx.work:work-runtime:2.7.1"
+    implementation 'org.xerial:sqlite-jdbc:3.45.1.0' // Latest version
+
+}
