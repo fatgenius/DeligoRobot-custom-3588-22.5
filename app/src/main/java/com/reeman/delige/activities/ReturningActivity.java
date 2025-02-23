@@ -241,7 +241,7 @@ public class ReturningActivity extends BaseActivity implements ReturningContract
                 int targetDeliveryAnimation = SpManager.getInstance().getInt(Constants.KEY_DELIVERY_ANIMATION, Constants.DEFAULT_DELIVERY_ANIMATION);
                 int identifier = getResources().getIdentifier("delivery_animation_" + targetDeliveryAnimation, "drawable", getPackageName());
                 deliveryDrawable = new GifDrawable(getResources(), identifier);
-                deliveryView.setImageDrawable(deliveryDrawable);
+//                deliveryView.setImageDrawable(deliveryDrawable);
                 deliveryView.setBackgroundColor(Color.BLACK);
             }
         } catch (IOException e) {
@@ -290,10 +290,10 @@ public class ReturningActivity extends BaseActivity implements ReturningContract
         }
         switch (id) {
             case R.id.tv_cancel_task_in_pause_view:
-                presenter.onTaskCancel(this);
+//                presenter.onTaskCancel(this);
                 break;
             case R.id.tv_return_in_pause_view:
-                onTaskContinue();
+//                onTaskContinue();
                 break;
         }
     }
